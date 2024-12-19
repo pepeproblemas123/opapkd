@@ -1,3 +1,16 @@
+!pip install buildozer
+!pip install cython
+
+# Instalar dependencias necesarias
+!apt-get update
+!apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+
+# Crear directorio de trabajo
+!mkdir openbullet
+%cd openbullet
+
+# Crear buildozer.spec
+%%writefile buildozer.spec
 [app]
 title = OpenBullet Checker
 package.name = openbullet_checker
@@ -23,3 +36,18 @@ p4a.bootstrap = sdl2
 [buildozer]
 log_level = 2
 warn_on_root = 1
+
+# Crear main.py
+%%writefile main.py
+# Pega aquí el contenido de tu main.py
+
+# Crear checker.kv
+%%writefile checker.kv
+# Pega aquí el contenido de tu checker.kv
+
+# Crear OpenBullet.py
+%%writefile OpenBullet.py
+# Pega aquí el contenido de tu OpenBullet.py
+
+# Construir APK
+!buildozer android debug
