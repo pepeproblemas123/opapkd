@@ -1,0 +1,287 @@
+#:kivy 2.0.0
+
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+
+# Estilos comunes
+<FlatButton@ButtonBehavior+BoxLayout>:
+    text: ''
+    color: 1, 1, 1, 1
+    size_hint_y: None
+    height: 50
+    padding: 10, 0
+    canvas.before:
+        Color:
+            rgba: get_color_from_hex('#2196F3') if self.state == 'normal' else get_color_from_hex('#1976D2')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [5]
+    Label:
+        text: root.text
+        color: root.color
+        font_size: '16sp'
+
+<StatsCard@BoxLayout>:
+    title: ''
+    value: ''
+    orientation: 'vertical'
+    padding: 10
+    spacing: 5
+    size_hint_y: None
+    height: 80
+    canvas.before:
+        Color:
+            rgba: get_color_from_hex('#1E1E1E')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10]
+    Label:
+        text: root.title
+        color: get_color_from_hex('#9E9E9E')
+        font_size: '14sp'
+        size_hint_y: None
+        height: 20
+        halign: 'left'
+        text_size: self.size
+    Label:
+        text: root.value
+        color: 1, 1, 1, 1
+        font_size: '24sp'
+        bold: True
+
+<CheckerRoot>:
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: get_color_from_hex('#121212')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Barra superior
+    BoxLayout:
+        size_hint_y: None
+        height: 60
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: get_color_from_hex('#1E1E1E')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: 'OpenBullet'
+            color: 1, 1, 1, 1
+            font_size: '20sp'
+            bold: True
+            size_hint_x: None
+            width: 120
+
+        Widget:
+            size_hint_x: 0.7
+
+        Button:
+            id: start_button
+            text: 'Start'
+            size_hint_x: None
+            width: 100
+            background_color: get_color_from_hex('#4CAF50')
+            color: 1, 1, 1, 1
+            font_size: '16sp'
+            on_press: root.start_check()
+            canvas.before:
+                Color:
+                    rgba: self.background_color
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+
+    # Área de contenido principal
+    ScrollView:
+        do_scroll_x: False
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+            padding: 15
+            spacing: 15
+
+            # Tarjetas de estadísticas
+            GridLayout:
+                cols: 2
+                spacing: 10
+                size_hint_y: None
+                height: self.minimum_height
+                
+                StatsCard:
+                    title: 'Total'
+                    value: '0'
+                    id: total_label
+                
+                StatsCard:
+                    title: 'Hits'
+                    value: '0'
+                    id: hits_label
+                
+                StatsCard:
+                    title: 'CPM'
+                    value: '0'
+                    id: cpm_label
+                
+                StatsCard:
+                    title: 'Progress'
+                    value: '0%'
+                    id: progress_label
+
+            # Controles de configuración
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                padding: [0, 10]
+                canvas.before:
+                    Color:
+                        rgba: get_color_from_hex('#1E1E1E')
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+
+                Label:
+                    text: 'Configuration'
+                    color: get_color_from_hex('#9E9E9E')
+                    font_size: '16sp'
+                    size_hint_y: None
+                    height: 40
+                    padding: [15, 0]
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: 15
+                    spacing: 10
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: 40
+                        spacing: 10
+                        Label:
+                            text: 'Bots:'
+                            size_hint_x: None
+                            width: 100
+                            color: get_color_from_hex('#9E9E9E')
+                        TextInput:
+                            id: bots_count
+                            text: '100'
+                            multiline: False
+                            background_color: get_color_from_hex('#2E2E2E')
+                            foreground_color: 1, 1, 1, 1
+                            padding: [10, 10]
+                            font_size: '16sp'
+
+                    FlatButton:
+                        text: 'Select Config'
+                        on_press: root.show_file_chooser('config')
+
+                    TextInput:
+                        id: config_input
+                        hint_text: 'Config File Path'
+                        size_hint_y: None
+                        height: 40
+                        multiline: False
+                        background_color: get_color_from_hex('#2E2E2E')
+                        foreground_color: 1, 1, 1, 1
+                        padding: [10, 10]
+                        font_size: '16sp'
+
+                    FlatButton:
+                        text: 'Select Wordlist'
+                        on_press: root.show_file_chooser('combo')
+
+                    TextInput:
+                        id: combo_input
+                        hint_text: 'Wordlist File Path'
+                        size_hint_y: None
+                        height: 40
+                        multiline: False
+                        background_color: get_color_from_hex('#2E2E2E')
+                        foreground_color: 1, 1, 1, 1
+                        padding: [10, 10]
+                        font_size: '16sp'
+
+                    FlatButton:
+                        text: 'Select Proxies'
+                        on_press: root.show_file_chooser('proxy')
+
+                    TextInput:
+                        id: proxy_input
+                        hint_text: 'Proxy File Path'
+                        size_hint_y: None
+                        height: 40
+                        multiline: False
+                        background_color: get_color_from_hex('#2E2E2E')
+                        foreground_color: 1, 1, 1, 1
+                        padding: [10, 10]
+                        font_size: '16sp'
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: 40
+                        spacing: 10
+                        Label:
+                            text: 'Proxy Type:'
+                            size_hint_x: None
+                            width: 100
+                            color: get_color_from_hex('#9E9E9E')
+                        Spinner:
+                            id: proxy_type
+                            text: 'HTTP'
+                            values: ['HTTP', 'SOCKS4', 'SOCKS5']
+                            background_color: get_color_from_hex('#2E2E2E')
+                            color: 1, 1, 1, 1
+                            font_size: '16sp'
+
+            # Lista de resultados
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                canvas.before:
+                    Color:
+                        rgba: get_color_from_hex('#1E1E1E')
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+
+                Label:
+                    text: 'Results'
+                    color: get_color_from_hex('#9E9E9E')
+                    font_size: '16sp'
+                    size_hint_y: None
+                    height: 40
+                    padding: [15, 0]
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+
+                ScrollView:
+                    size_hint_y: None
+                    height: 300
+                    GridLayout:
+                        id: data_grid
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: 2
+                        padding: 15
